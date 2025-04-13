@@ -7,7 +7,6 @@ import guestRoutes from "./routes/guests.routes";
 config();
 
 const app = express();
-app.use(cors());
 app.use(
   cors({
     origin: "https://ceald-web-app.vercel.app",
