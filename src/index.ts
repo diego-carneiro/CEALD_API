@@ -7,13 +7,16 @@ import guestRoutes from "./routes/guests.routes";
 config();
 
 const app = express();
+
 app.use(
   cors({
     origin: "https://ceald-web-app.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 app.use(express.json());
 
 // Conectar ao MongoDB
