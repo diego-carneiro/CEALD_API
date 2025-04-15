@@ -1,5 +1,18 @@
 import app from ".";
+import { MongoClient } from "./database/mongo";
 
-const PORT = process.env.PORT || 8000;
+const PORT = Number(process.env.PORT) || 8000;
 
-app.listen(PORT, () => console.log(`Server running at port ${PORT}.`));
+async function startServer() {
+  try {
+    await MongoClient.connect();
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running at port ${PORT}.`);
+    });
+  } catch (err) {
+    console.error("Erro ao conectar com o banco:", err);
+    process.exit(1);
+  }
+}
+
+startServer();
