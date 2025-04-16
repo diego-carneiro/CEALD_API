@@ -38,7 +38,6 @@ export class CreateGuestRepository implements ICreateGuestRepository {
       throw new Error("Guest not registered");
     }
 
-    // Buscar a posição do convidado na lista, ordenada por _id (ordem de inserção)
     const position =
       (await MongoClient.db
         .collection("CEALD_Guests")

@@ -36,7 +36,6 @@ router.post("/guest", async (req, res) => {
 });
 
 // GET /is-open
-
 router.get("/is-open", (req, res): void => {
   const isOpen: boolean = isWithinOperatingHours();
 
