@@ -1,4 +1,4 @@
-import app from ".";
+import app from "././index";
 import { MongoClient } from "./database/mongo";
 
 const PORT = Number(process.env.PORT) || 8000;
