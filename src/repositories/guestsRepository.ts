@@ -8,15 +8,20 @@ import {
 
 export class GetGuestsRepository implements IGetGuestsRepository {
   async getGuests(): Promise<Guest[]> {
-    const guests = await MongoClient.db
-      .collection<Omit<Guest, "id">>("CEALD_Guests")
-      .find({})
-      .toArray();
+    try {
+      const guests = await MongoClient.db
+        .collection<Omit<Guest, "id">>("CEALD_Guests")
+        .find({})
+        .toArray();
 
-    return guests.map(({ _id, ...rest }) => ({
-      ...rest,
-      id: _id.toHexString(),
-    }));
+      return guests.map(({ _id, ...rest }) => ({
+        ...rest,
+        id: _id.toHexString(),
+      }));
+    } catch (error) {
+      console.error("Guest not registered:", error);
+      throw error;
+    }
   }
 }
 
@@ -26,25 +31,30 @@ export interface GuestWithPosition extends Guest {
 
 export class CreateGuestRepository implements ICreateGuestRepository {
   async createGuest(params: CreateGuestParams): Promise<GuestWithPosition> {
-    const { insertedId } = await MongoClient.db
-      .collection("CEALD_Guests")
-      .insertOne(params);
-
-    const guest = await MongoClient.db
-      .collection<Omit<Guest, "id">>("CEALD_Guests")
-      .findOne({ _id: insertedId });
-
-    if (!guest) {
-      throw new Error("Guest not registered");
-    }
-
-    const position =
-      (await MongoClient.db
+    try {
+      const { insertedId } = await MongoClient.db
         .collection("CEALD_Guests")
-        .countDocuments({ _id: { $lt: insertedId } })) + 1;
+        .insertOne(params);
 
-    const { _id, ...rest } = guest;
+      const guest = await MongoClient.db
+        .collection<Omit<Guest, "id">>("CEALD_Guests")
+        .findOne({ _id: insertedId });
 
-    return { id: _id.toHexString(), ...rest, position };
+      if (!guest) {
+        throw new Error("Guest not registered");
+      }
+
+      const position =
+        (await MongoClient.db
+          .collection("CEALD_Guests")
+          .countDocuments({ _id: { $lt: insertedId } })) + 1;
+
+      const { _id, ...rest } = guest;
+
+      return { id: _id.toHexString(), ...rest, position };
+    } catch (error) {
+      console.error("Guest not registered:", error);
+      throw error;
+    }
   }
 }
