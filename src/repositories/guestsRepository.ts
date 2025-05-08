@@ -32,6 +32,18 @@ export interface GuestWithPosition extends Guest {
 export class CreateGuestRepository implements ICreateGuestRepository {
   async createGuest(params: CreateGuestParams): Promise<GuestWithPosition> {
     try {
+      const { phoneNumber } = params;
+
+      // Verificar se já existe um convidado com o mesmo phoneNumber
+      const existing = await MongoClient.db
+        .collection("CEALD_Guests")
+        .findOne({ phoneNumber });
+
+      if (existing) {
+        throw new Error("Guest with this phone number already exists");
+      }
+
+      // Inserir o novo convidado
       const { insertedId } = await MongoClient.db
         .collection("CEALD_Guests")
         .insertOne(params);

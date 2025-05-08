@@ -4,10 +4,12 @@ import { HttpRequest, HttpResponse } from "./protocols";
 export interface Guest {
   id: string;
   guestName: string;
+  phoneNumber: string;
 }
 
 export interface CreateGuestParams {
   guestName: string;
+  phoneNumber: string;
 }
 
 export interface ICreateGuest {

@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
+import adminRoutes from "./routes/admin.routes";
 import guestRoutes from "./routes/guests.routes";
 
 config();
@@ -19,6 +20,7 @@ app.use(
 app.use(express.json());
 
 // Rotas
+app.use("/admin", adminRoutes);
 app.use(guestRoutes);
 
 export default app;

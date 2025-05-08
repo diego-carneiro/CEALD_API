@@ -53,8 +53,14 @@ export class CreateGuestController implements ICreateGuestController {
         statusCode: 201,
         body: guest,
       };
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      if (error instanceof Error && error.message.includes("already exists")) {
+        return {
+          statusCode: 400,
+          body: error.message,
+        };
+      }
+
       return {
         statusCode: 500,
         body: "Something went wrong.",
