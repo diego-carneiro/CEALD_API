@@ -3,6 +3,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import adminRoutes from "./routes/admin.routes";
 import guestRoutes from "./routes/guests.routes";
+import { scheduleGuestCleanup } from "./cron/guestCleanup";
 
 config();
 
@@ -20,7 +21,9 @@ app.use(
 app.use(express.json());
 
 // Rotas
-app.use("/admin", adminRoutes);
+app.use(adminRoutes);
 app.use(guestRoutes);
+
+scheduleGuestCleanup();
 
 export default app;
